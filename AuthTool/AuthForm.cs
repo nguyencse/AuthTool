@@ -35,6 +35,9 @@ namespace AuthTool
             {
                 string path = ConvertPackageToPath(txtProjectLocation.Text, txtPackage.Text);
                 Directory.CreateDirectory(path + "\\auth");
+                Directory.CreateDirectory(path + "\\auth\\login");
+                Directory.CreateDirectory(path + "\\auth\\register");
+                Directory.CreateDirectory(path + "\\auth\\reset");
                 Directory.CreateDirectory(path + "\\custom");
                 Directory.CreateDirectory(txtProjectLocation.Text + "\\app\\src\\main\\assets");
                 Directory.CreateDirectory(txtProjectLocation.Text + "\\app\\src\\main\\assets\\fonts");
@@ -42,7 +45,9 @@ namespace AuthTool
                 string excutePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);    // Get current directory
 
                 ConfigManifest(excutePath + "\\Resources", txtProjectLocation.Text, txtPackage.Text);
-                CopyAllFilesToPath(excutePath + "\\Resources\\java\\auth", path + "\\auth", true);
+                CopyAllFilesToPath(excutePath + "\\Resources\\java\\auth\\login", path + "\\auth\\login", true);
+                CopyAllFilesToPath(excutePath + "\\Resources\\java\\auth\\register", path + "\\auth\\register", true);
+                CopyAllFilesToPath(excutePath + "\\Resources\\java\\auth\\reset", path + "\\auth\\reset", true);
                 CopyAllFilesToPath(excutePath + "\\Resources\\java\\custom", path + "\\custom", true);    // Copy custom controls
                 CopyAllFilesToPath(excutePath + "\\Resources\\assets\\fonts", txtProjectLocation.Text + "\\app\\src\\main\\assets\\fonts", false);
                 CopyAllFilesToPath(excutePath + "\\Resources\\res\\values", txtProjectLocation.Text + "\\app\\src\\main\\res\\values", false);
@@ -93,9 +98,17 @@ namespace AuthTool
             {
                 if (line.Contains("package"))
                 {
-                    if (fileName.Contains("Activity.java"))
+                    if (fileName.Equals("LoginActivity.java"))
                     {
-                        content += "package " + package + ".auth;";
+                        content += "package " + package + ".auth.login;";
+                    }
+                    else if (fileName.Equals("RegisterActivity.java"))
+                    {
+                        content += "package " + package + ".auth.register;";
+                    }
+                    else if (fileName.Equals("ResetPasswordActivity.java"))
+                    {
+                        content += "package " + package + ".auth.reset;";
                     }
                     else
                     {
@@ -151,7 +164,7 @@ namespace AuthTool
             {
                 if (line.Contains("package=\""))
                 {
-                    content += "package=\""+ package +"\">";
+                    content += "package=\"" + package + "\">";
                 }
                 else
                 {
@@ -160,6 +173,13 @@ namespace AuthTool
                 content += Environment.NewLine;
             }
             File.WriteAllText(projectPath + "\\app\\src\\main\\AndroidManifest.xml", content);
+        }
+
+        private void ConfigGradle(string pathFile)
+        {
+            string content = "";
+            var lines = File.ReadLines(pathFile);
+
         }
 
         private string ConvertPackageToPath(string pathProject, string package)
