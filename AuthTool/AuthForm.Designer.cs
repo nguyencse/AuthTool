@@ -220,7 +220,6 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtProjectLocation);
             this.Name = "AuthForm";
-            this.Opacity = 0.8D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Authentication";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
